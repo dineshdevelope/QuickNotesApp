@@ -1,10 +1,14 @@
-const express = require("express");
-require("dotenv").config();
+import express from "express";
+//require("dotenv").config();
+import dotenv from "dotenv";
 const app = express();
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const PORT = process.env.PORT || 4000;
-const taskRoutes = require("./routes/taskRoutes");
-const cors = require("cors");
+import taskRoutes from "./routes/taskRoutes.js";
+import cors from "cors";
+import path from "path";
+const __dirname = path.resolve();
+dotenv.config();
 //Middleware
 app.use((req, res, next) => {
   console.log(`Path ${req.path}  & Method :${req.method}`);
@@ -28,7 +32,13 @@ mongoose
 
 app.use("/api/tasks", taskRoutes);
 
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "/client/build")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
+
 app.listen(PORT, () => {
   console.log(`Server is Running at ${PORT}`);
 });
-app.use("/api/tasks", taskRoutes);

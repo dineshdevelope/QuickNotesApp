@@ -1,8 +1,8 @@
-const { default: mongoose } = require("mongoose");
-const taskModel = require("../../models/TaskModel");
+import mongoose from "mongoose";
+import taskModel from "../models/TaskModel.js";
 
 //To Create A Task -POST Method
-const createTask = async (req, res) => {
+export const createTask = async (req, res) => {
   const { title, description } = req.body;
   try {
     const task = await taskModel.create({ title, description });
@@ -14,7 +14,7 @@ const createTask = async (req, res) => {
 
 //Show Task - GET Method
 //To Get ALL Tasks
-const getTasks = async (req, res) => {
+export const getTasks = async (req, res) => {
   try {
     const tasks = await taskModel.find({});
     res.status(200).json(tasks);
@@ -24,7 +24,7 @@ const getTasks = async (req, res) => {
 };
 
 //To get a Single task -GET
-const getSingletTask = async (req, res) => {
+export const getSingletTask = async (req, res) => {
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: "Id Not Found" });
@@ -38,7 +38,7 @@ const getSingletTask = async (req, res) => {
 };
 
 //To Update a Task -PATCH
-const updateTask = async (req, res) => {
+export const updateTask = async (req, res) => {
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: "Task Not Found" });
@@ -62,7 +62,7 @@ const updateTask = async (req, res) => {
 };
 
 //Delete a Task -DELETE
-const deleteTask = async (req, res) => {
+export const deleteTask = async (req, res) => {
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: "Task Not Found" });
@@ -73,12 +73,4 @@ const deleteTask = async (req, res) => {
   } catch (e) {
     res.status(400).json({ error: "Task Not Found" });
   }
-};
-
-module.exports = {
-  createTask,
-  getTasks,
-  getSingletTask,
-  updateTask,
-  deleteTask,
 };
